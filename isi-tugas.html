@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title id="pageTitle">Detail & Isi Tugas | Muhammad Wandi Saputra Nurhasan</title>
+  <meta name="description" content="Detail dan Isi Materi Pengerjaan Tugas Sistem Operasi.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#122C4F',
+            pearl: '#FBF9E4',
+            noir: '#000000',
+            ocean: '#5B88B2',
+            surface: {
+              dark: '#080d16',
+              darker: '#04070c',
+              card: '#0c1728',
+              border: '#1a3254',
+              light: '#f4f1d4',
+              lightCard: '#ffffff',
+              lightBorder: '#e2ddbc'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Times New Roman', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/custom.css">
+
+  <!-- File Data Publik Tugas OS (Agar bisa dilihat semua orang) -->
+  <script src="js/data-tugas.js"></script>
+  <!-- Authentication Handler (Khusus Pemilik) -->
+  <script src="js/auth.js"></script>
+</head>
+<body class="bg-noir text-pearl font-sans antialiased selection:bg-ocean selection:text-noir transition-colors duration-300 min-h-screen flex flex-col">
+
+  <!-- Header / Navigation -->
+  <header id="mainHeader" class="fixed top-0 left-0 right-0 z-50 bg-noir/90 backdrop-blur-md border-b border-surface-border shadow-xl shadow-noir/50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        
+        <!-- Back to Tugas Link -->
+        <a href="tugas-sistem-operasi.html" class="flex items-center gap-3 group">
+          <div id="backBtnIcon" class="w-9 h-9 rounded-xl bg-midnight/60 border border-ocean/40 flex items-center justify-center text-ocean group-hover:bg-ocean group-hover:text-noir transition-all duration-300">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </div>
+          <div class="flex flex-col">
+            <span id="backBtnText" class="text-sm sm:text-base font-bold tracking-tight text-pearl group-hover:text-ocean transition-colors">
+              Kembali ke Daftar Tugas
+            </span>
+            <span id="headerModulSubtitle" class="text-[11px] uppercase tracking-widest text-ocean font-medium">
+              Sistem Operasi • Modul Tugas
+            </span>
+          </div>
+        </a>
+
+        <!-- Status & Theme Toggle & Edit Action -->
+        <div class="flex items-center gap-2.5">
+          <!-- Tombol Pemilik / Owner Access -->
+          <button id="ownerAuthBtn" onclick="handleOwnerAuthClick()" class="px-3 py-1.5 rounded-xl border border-ocean/30 bg-surface-card hover:border-ocean text-xs font-semibold text-ocean transition-all flex items-center gap-1.5" title="Akses Khusus Pemilik Portofolio">
+            <i data-lucide="lock" id="ownerAuthIcon" class="w-3.5 h-3.5"></i>
+            <span id="ownerAuthLabel">Masuk Pemilik</span>
+          </button>
+
+          <button id="exportDataBtn" onclick="exportDataTugasFile()" title="Download file data-tugas.js agar orang lain bisa melihat foto & isi tugas ini" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-ocean/40 bg-midnight/30 hover:bg-ocean/20 text-ocean text-xs font-semibold transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Download Data</span>
+          </button>
+
+          <button id="toggleEditBtn" onclick="toggleEditMode()" class="px-3.5 py-1.5 rounded-xl border border-ocean/40 bg-midnight/50 hover:bg-ocean hover:text-noir text-ocean text-xs font-semibold flex items-center gap-1.5 transition-all">
+            <i data-lucide="edit-3" id="editBtnIcon" class="w-4 h-4"></i>
+            <span id="editBtnLabel">Edit Isi Tugas</span>
+          </button>
+
+          <button id="themeToggle" class="p-2.5 rounded-xl border bg-surface-card border-surface-border text-ocean hover:text-pearl hover:border-ocean/60 transition-all duration-200" title="Ganti Mode">
+            <i data-lucide="sun" id="themeIcon" class="w-5 h-5 text-amber-300"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+    
+    <!-- Hero / Metadata Header Tugas -->
+    <div id="taskHeroBanner" class="relative rounded-3xl p-6 sm:p-10 mb-10 overflow-hidden border border-surface-border bg-gradient-to-br from-surface-card via-midnight/40 to-noir shadow-2xl transition-colors duration-300">
+      <div class="relative z-10">
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <span id="badgeModul" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-ocean/20 text-ocean border border-ocean/30">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+            Tugas
+          </span>
+          <span id="badgeStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Selesai
+          </span>
+        </div>
+
+        <h1 id="displayTitle" class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-pearl leading-tight mb-4 transition-colors">
+          Judul Tugas
+        </h1>
+        <p id="displayDesc" class="text-pearl/80 text-sm sm:text-base leading-relaxed mb-6 font-light transition-colors">
+          Deskripsi tugas...
+        </p>
+
+        <div id="displayTags" class="flex flex-wrap gap-2 pt-2 border-t border-surface-border/50">
+          <!-- Tags inserted dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Edit Mode Notification (Hidden by default) -->
+    <div id="editAlert" class="hidden mb-6 p-4 rounded-2xl bg-ocean/15 border border-ocean/40 text-ocean flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm">
+      <div class="flex items-center gap-2 font-medium">
+        <i data-lucide="info" class="w-5 h-5 flex-shrink-0"></i>
+        <span>Mode Editor Aktif: Anda dapat langsung mengubah teks, menambah foto/gambar screenshot, dan kode praktikum di bawah ini.</span>
+      </div>
+      <button onclick="saveContent()" class="px-4 py-1.5 rounded-xl bg-ocean text-noir font-bold hover:bg-ocean/90 transition shadow whitespace-nowrap">
+        Simpan Perubahan
+      </button>
+    </div>
+
+    <!-- Content Sections / Materi Isi Tugas -->
+    <div id="taskContentContainer" class="space-y-8">
+      
+      <!-- Section 1: Ringkasan Materi & Penjelasan Teks -->
+      <section class="content-card rounded-2xl p-6 sm:p-8 bg-surface-card border border-surface-border shadow-lg transition-colors duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
+            <i data-lucide="align-left" class="w-5 h-5 text-ocean"></i>
+            Ringkasan & Penjelasan Materi
+          </h2>
+          <span class="text-[11px] text-pearl/50 font-mono">(Teks Bebas)</span>
+        </div>
+        <div id="bodySummary" contenteditable="false" class="editable-area text-xs sm:text-sm text-pearl/85 leading-relaxed space-y-3 focus:outline-none focus:ring-1 focus:ring-ocean rounded-xl p-3 transition">
+          <p>Tuliskan ringkasan materi dan penjelasan hasil pengerjaan tugas di sini. Anda dapat menjelaskan latar belakang teori, langkah-langkah praktikum, atau analisis yang dilakukan.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Galeri & Lampiran Foto Dokumentasi (Screenshot) -->
+      <section class="content-card rounded-2xl p-6 sm:p-8 bg-surface-card border border-surface-border shadow-lg transition-colors duration-300">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
+              <i data-lucide="image" class="w-5 h-5 text-ocean"></i>
+              Foto & Screenshot Hasil Praktikum
+            </h2>
+            <p class="text-xs text-pearl/60 mt-0.5">Tampilan dokumentasi gambar hasil pengerjaan (tersimpan otomatis tanpa database).</p>
+          </div>
+
+          <!-- Tombol Upload Foto (Muncul saat Mode Edit) -->
+          <div id="uploadPhotoControls" class="hidden">
+            <label class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-ocean hover:bg-ocean/90 text-noir text-xs font-bold transition shadow">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Unggah Foto Baru</span>
+              <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+            </label>
+          </div>
+        </div>
+
+        <!-- Container Grid Gambar/Foto -->
+        <div id="photosGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Foto-foto dimuat secara dinamis di sini -->
+        </div>
+
+        <!-- Placeholder jika belum ada foto -->
+        <div id="emptyPhotosPlaceholder" class="py-10 px-4 text-center rounded-xl border border-dashed border-surface-border/80 bg-noir/30 flex flex-col items-center justify-center">
+          <i data-lucide="image" class="w-8 h-8 text-pearl/40 mb-2"></i>
+          <p class="text-xs text-pearl/60">Belum ada foto dokumentasi yang diunggah.</p>
+          <p class="text-[11px] text-pearl/40 mt-1">Aktifkan "Edit Isi Tugas" lalu klik "Unggah Foto Baru".</p>
+        </div>
+      </section>
+
+      <!-- Section 3: Kesimpulan -->
+      <section class="content-card rounded-2xl p-6 sm:p-8 bg-surface-card border border-surface-border shadow-lg transition-colors duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
+            <i data-lucide="check-square" class="w-5 h-5 text-ocean"></i>
+            Kesimpulan
+          </h2>
+        </div>
+        <div id="bodyNotes" contenteditable="false" class="editable-area text-xs sm:text-sm text-pearl/85 leading-relaxed space-y-2 focus:outline-none focus:ring-1 focus:ring-ocean rounded-xl p-3 transition">
+          <p>• Praktikum ini berhasil menguji alur eksekusi sesuai modul mata kuliah Sistem Operasi.</p>
+          <p>• Seluruh skenario berhasil dijalankan tanpa kendala kritis.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Save Action Bar (Shown when editing) -->
+    <div id="bottomSaveBar" class="hidden mt-8 flex items-center justify-end gap-3 pt-6 border-t border-surface-border/50">
+      <button onclick="toggleEditMode()" class="px-5 py-2.5 rounded-xl border border-surface-border text-pearl/80 hover:text-pearl text-xs sm:text-sm font-semibold transition">
+        Batal
+      </button>
+      <button onclick="saveContent()" class="px-6 py-2.5 rounded-xl bg-ocean text-noir hover:bg-ocean/90 text-xs sm:text-sm font-bold shadow-lg transition flex items-center gap-2">
+        <i data-lucide="save" class="w-4 h-4"></i>
+        <span>Simpan Semua Isi Tugas</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Modal Login Pemilik (Owner Access) -->
+  <div id="ownerAuthModal" class="fixed inset-0 z-50 hidden bg-noir/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="ownerModalBox" class="bg-surface-card border border-surface-border rounded-2xl max-w-sm w-full p-6 shadow-2xl relative transition-colors duration-300">
+      <button onclick="closeOwnerAuthModal()" class="absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-pearl owner-text">Autentikasi Pemilik</h3>
+          <p class="text-[11px] text-pearl/60 owner-subtext">Hanya pemilik portofolio yang dapat mengedit</p>
+        </div>
+      </div>
+
+      <form id="ownerLoginForm" onsubmit="handleOwnerLoginSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-ocean">Kata Sandi Pemilik</label>
+          <input type="password" id="ownerPasswordInput" required placeholder="Masukkan kata sandi..." class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs transition">
+        </div>
+        <p id="ownerAuthError" class="hidden text-rose-400 text-xs">Kata sandi salah. Silakan coba lagi.</p>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeOwnerAuthModal()" class="px-4 py-2 rounded-xl border border-surface-border text-pearl/70 hover:text-pearl text-xs font-semibold transition">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-ocean text-noir font-bold text-xs hover:bg-ocean/90 transition shadow">Masuk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Lightbox Pratinjau Foto Penuh -->
+  <div id="photoLightbox" class="fixed inset-0 z-50 hidden bg-noir/90 backdrop-blur-md flex items-center justify-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-pearl transition">
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <div class="max-w-4xl max-h-[85vh] flex flex-col items-center">
+      <img id="lightboxImg" src="" alt="Pratinjau Foto" class="max-w-full max-h-[75vh] rounded-2xl shadow-2xl object-contain border border-surface-border">
+      <p id="lightboxCaption" class="text-xs sm:text-sm text-pearl/80 mt-3 text-center"></p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="mainFooter" class="border-t border-surface-border/60 bg-surface-darker py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-pearl/60">
+      <p id="footerCopy">© 2026 Muhammad Wandi Saputra Nurhasan. Praktikum & Tugas Sistem Operasi.</p>
+      <div class="flex items-center gap-4">
+        <a href="tugas-sistem-operasi.html" class="hover:text-ocean transition">Daftar Tugas</a>
+        <span>•</span>
+        <a href="index.html" class="hover:text-ocean transition">Beranda Portofolio</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function refreshIcons() {
+      if (window.lucide) window.lucide.createIcons();
+    }
+    refreshIcons();
+
+    // Parse URL param ?id=
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('id');
+
+    const LOCAL_TASKS_KEY = 'portfolio_custom_os_tasks';
+    const DELETED_TASKS_KEY = 'portfolio_deleted_os_tasks';
+
+    // Bersihkan otomatis ID lama jika masih tersangkut di browser
+    (function cleanupOldTestTasks() {
+      const obsoleteIds = ['task_1794478172169', 'task_1794479643008'];
+      try {
+        let local = JSON.parse(localStorage.getItem(LOCAL_TASKS_KEY)) || [];
+        if (Array.isArray(local) && local.length > 0) {
+          const filtered = local.filter(t => !obsoleteIds.includes(t.id));
+          if (filtered.length !== local.length) {
+            localStorage.setItem(LOCAL_TASKS_KEY, JSON.stringify(filtered));
+          }
+        }
+      } catch (e) {}
+    })();
+
+    function getDeletedTaskIds() {
+      try {
+        return JSON.parse(localStorage.getItem(DELETED_TASKS_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getStoredTasks() {
+      const publicTasks = Array.isArray(window.DATA_TUGAS_OS) ? window.DATA_TUGAS_OS : [];
+      let localTasks = [];
+      try {
+        localTasks = JSON.parse(localStorage.getItem(LOCAL_TASKS_KEY)) || [];
+      } catch (e) {
+        localTasks = [];
+      }
+
+      const deletedIds = getDeletedTaskIds();
+
+      const mergedMap = new Map();
+      publicTasks.forEach(t => {
+        if (!deletedIds.includes(t.id)) mergedMap.set(t.id, t);
+      });
+      localTasks.forEach(t => {
+        if (!deletedIds.includes(t.id)) mergedMap.set(t.id, t);
+      });
+
+      return Array.from(mergedMap.values());
+    }
+
+    function saveStoredTasks(tasks) {
+      localStorage.setItem(LOCAL_TASKS_KEY, JSON.stringify(tasks));
+    }
+
+    let currentTask = null;
+    let uploadedPhotos = [];
+
+    function initPage() {
+      const tasks = getStoredTasks();
+      currentTask = tasks.find(t => t.id === taskId);
+
+      if (!currentTask) {
+        currentTask = {
+          id: taskId || 'task_' + Date.now(),
+          modul: 'Tugas Praktikum',
+          title: 'Halaman Isi Tugas',
+          desc: 'Dokumentasi detail materi dan hasil pengerjaan tugas Sistem Operasi.',
+          tags: ['Sistem Operasi', 'Praktikum'],
+          content: {
+            summary: '<p>Tuliskan ringkasan materi dan penjelasan hasil pengerjaan tugas di sini.</p>',
+            notes: '<p>• Kesimpulan pengerjaan tugas berhasil diselesaikan.</p>',
+            photos: []
+          }
+        };
+      }
+
+      document.getElementById('pageTitle').textContent = `${currentTask.title} | Muhammad Wandi Saputra N.`;
+      document.getElementById('displayTitle').textContent = currentTask.title;
+      document.getElementById('displayDesc').textContent = currentTask.desc;
+      document.getElementById('badgeModul').innerHTML = `<i data-lucide="book-open" class="w-3.5 h-3.5"></i> ${currentTask.modul}`;
+      document.getElementById('headerModulSubtitle').textContent = `Sistem Operasi • ${currentTask.modul}`;
+
+      const tagsContainer = document.getElementById('displayTags');
+      tagsContainer.innerHTML = (currentTask.tags || []).map(t => 
+        `<span class="tag-badge text-[11px] px-2.5 py-1 rounded-md bg-midnight/40 text-ocean border border-ocean/20 font-mono">${t}</span>`
+      ).join(' ');
+
+      // Populate content if exists
+      if (currentTask.content) {
+        if (currentTask.content.summary) document.getElementById('bodySummary').innerHTML = currentTask.content.summary;
+        if (currentTask.content.notes) document.getElementById('bodyNotes').innerHTML = currentTask.content.notes;
+        uploadedPhotos = currentTask.content.photos || [];
+      }
+
+      renderPhotos();
+      refreshIcons();
+    }
+
+    // Render Galeri Foto
+    function renderPhotos() {
+      const grid = document.getElementById('photosGrid');
+      const empty = document.getElementById('emptyPhotosPlaceholder');
+
+      grid.innerHTML = '';
+      if (!uploadedPhotos || uploadedPhotos.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      uploadedPhotos.forEach((photo, idx) => {
+        const card = document.createElement('div');
+        card.className = "photo-item group relative rounded-2xl overflow-hidden border border-surface-border bg-noir/50 shadow-md transition-all hover:border-ocean/60";
+
+        card.innerHTML = `
+          <div class="aspect-video w-full overflow-hidden bg-black/40 cursor-pointer" onclick="openLightbox('${photo.data}', '${photo.name || 'Dokumentasi Tugas'}')">
+            <img src="${photo.data}" alt="${photo.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+          </div>
+          <div class="p-3 flex items-center justify-between gap-2 border-t border-surface-border/40">
+            <p class="text-xs font-medium text-pearl/80 truncate">${photo.name || 'Foto ' + (idx + 1)}</p>
+            <div class="flex items-center gap-1">
+              <button onclick="openLightbox('${photo.data}', '${photo.name || 'Dokumentasi Tugas'}')" title="Perbesar" class="p-1 text-ocean hover:text-pearl transition">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="deletePhoto(${idx})" title="Hapus Foto" class="photo-delete-btn ${isEditing ? '' : 'hidden'} p-1 text-rose-400 hover:text-rose-300 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      refreshIcons();
+    }
+
+    // Handle Upload Foto ke Data URL (Base64) tanpa database
+    function handlePhotoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Cek ukuran file (maksimal ~3MB agar localStorage aman)
+      if (file.size > 3 * 1024 * 1024) {
+        alert("Ukuran foto maksimal 3MB agar performa tetap cepat.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const base64Data = evt.target.result;
+        uploadedPhotos.push({
+          id: 'photo_' + Date.now(),
+          name: file.name,
+          data: base64Data
+        });
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+
+    function deletePhoto(idx) {
+      if (!confirm("Hapus foto ini dari tugas?")) return;
+      uploadedPhotos.splice(idx, 1);
+      renderPhotos();
+    }
+
+    // ==================== OWNER AUTHENTICATION LOGIC ====================
+    const ownerAuthModal = document.getElementById('ownerAuthModal');
+    const ownerPasswordInput = document.getElementById('ownerPasswordInput');
+    const ownerAuthError = document.getElementById('ownerAuthError');
+    const ownerAuthBtn = document.getElementById('ownerAuthBtn');
+    const ownerAuthLabel = document.getElementById('ownerAuthLabel');
+    const toggleEditBtn = document.getElementById('toggleEditBtn');
+    const exportDataBtn = document.getElementById('exportDataBtn');
+
+    function checkOwnerStatus() {
+      const isOwner = window.PORTFOLIO_AUTH && window.PORTFOLIO_AUTH.isOwner();
+
+      if (isOwner) {
+        ownerAuthLabel.textContent = "Keluar Pemilik";
+        ownerAuthBtn.className = "px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all flex items-center gap-1.5";
+        ownerAuthBtn.title = "Klik untuk keluar dari Mode Pemilik";
+        if (toggleEditBtn) toggleEditBtn.style.display = 'inline-flex';
+        if (exportDataBtn) exportDataBtn.style.display = 'inline-flex';
+      } else {
+        ownerAuthLabel.textContent = "Masuk Pemilik";
+        ownerAuthBtn.className = "px-3 py-1.5 rounded-xl border border-ocean/30 bg-surface-card hover:border-ocean text-xs font-semibold text-ocean transition-all flex items-center gap-1.5";
+        ownerAuthBtn.title = "Akses Khusus Pemilik Portofolio";
+        if (toggleEditBtn) toggleEditBtn.style.display = 'none';
+        if (exportDataBtn) exportDataBtn.style.display = 'none';
+
+        // Jika sedang edit lalu logout, paksa keluar mode edit
+        if (isEditing) {
+          toggleEditMode();
+        }
+      }
+      refreshIcons();
+    }
+
+    function handleOwnerAuthClick() {
+      const isOwner = window.PORTFOLIO_AUTH && window.PORTFOLIO_AUTH.isOwner();
+      if (isOwner) {
+        if (confirm("Keluar dari Mode Pemilik? Fitur edit akan dinonaktifkan.")) {
+          window.PORTFOLIO_AUTH.logout();
+          checkOwnerStatus();
+        }
+      } else {
+        openOwnerAuthModal();
+      }
+    }
+
+    function openOwnerAuthModal() {
+      ownerAuthModal.classList.remove('hidden');
+      ownerPasswordInput.value = '';
+      ownerAuthError.classList.add('hidden');
+      ownerPasswordInput.focus();
+      refreshIcons();
+    }
+
+    function closeOwnerAuthModal() {
+      ownerAuthModal.classList.add('hidden');
+    }
+
+    ownerAuthModal.addEventListener('click', (e) => {
+      if (e.target === ownerAuthModal) closeOwnerAuthModal();
+    });
+
+    function handleOwnerLoginSubmit(e) {
+      e.preventDefault();
+      const val = ownerPasswordInput.value.trim();
+      if (window.PORTFOLIO_AUTH && window.PORTFOLIO_AUTH.login(val)) {
+        closeOwnerAuthModal();
+        checkOwnerStatus();
+        alert("Autentikasi Pemilik Berhasil! Tombol 'Edit Isi Tugas' dan 'Download Data' kini aktif.");
+      } else {
+        ownerAuthError.classList.remove('hidden');
+      }
+    }
+
+    // Lightbox Pratinjau
+    function openLightbox(src, caption) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxCaption').textContent = caption;
+      document.getElementById('photoLightbox').classList.remove('hidden');
+      refreshIcons();
+    }
+
+    function closeLightbox() {
+      document.getElementById('photoLightbox').classList.add('hidden');
+    }
+
+    document.getElementById('photoLightbox').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('photoLightbox')) closeLightbox();
+    });
+
+    // Mode Edit Switcher
+    let isEditing = false;
+    function toggleEditMode() {
+      isEditing = !isEditing;
+      const editableAreas = document.querySelectorAll('.editable-area');
+      const editAlert = document.getElementById('editAlert');
+      const bottomSaveBar = document.getElementById('bottomSaveBar');
+      const editBtnLabel = document.getElementById('editBtnLabel');
+      const uploadControls = document.getElementById('uploadPhotoControls');
+
+      editableAreas.forEach(el => {
+        el.setAttribute('contenteditable', isEditing ? 'true' : 'false');
+        if (isEditing) {
+          el.classList.add('ring-2', 'ring-ocean/60', 'bg-white/5');
+        } else {
+          el.classList.remove('ring-2', 'ring-ocean/60', 'bg-white/5');
+        }
+      });
+
+      if (isEditing) {
+        editAlert.classList.remove('hidden');
+        bottomSaveBar.classList.remove('hidden');
+        uploadControls.classList.remove('hidden');
+        editBtnLabel.textContent = "Selesai Edit";
+        document.querySelectorAll('.photo-delete-btn').forEach(btn => btn.classList.remove('hidden'));
+      } else {
+        editAlert.classList.add('hidden');
+        bottomSaveBar.classList.add('hidden');
+        uploadControls.classList.add('hidden');
+        editBtnLabel.textContent = "Edit Isi Tugas";
+        document.querySelectorAll('.photo-delete-btn').forEach(btn => btn.classList.add('hidden'));
+      }
+      refreshIcons();
+    }
+
+    function saveContent() {
+      const summary = document.getElementById('bodySummary').innerHTML;
+      const notes = document.getElementById('bodyNotes').innerHTML;
+
+      if (!currentTask.content) currentTask.content = {};
+      currentTask.content.summary = summary;
+      currentTask.content.notes = notes;
+      currentTask.content.photos = uploadedPhotos;
+
+      const tasks = getStoredTasks();
+      const idx = tasks.findIndex(t => t.id === currentTask.id);
+      if (idx !== -1) {
+        tasks[idx] = currentTask;
+      } else {
+        tasks.push(currentTask);
+      }
+      saveStoredTasks(tasks);
+
+      toggleEditMode();
+      alert("Seluruh isi tugas (teks dan foto) berhasil disimpan!");
+    }
+
+    // Fungsi Export File data-tugas.js agar orang lain bisa melihat
+    function exportDataTugasFile() {
+      const allTasks = getStoredTasks();
+      if (allTasks.length === 0) {
+        alert("Belum ada data tugas untuk di-download.");
+        return;
+      }
+
+      const fileContent = `/**\n * File Data Publik Tugas Sistem Operasi\n * Muhammad Wandi Saputra Nurhasan (2503010050)\n * Terakhir Diperbarui: ${new Date().toLocaleString('id-ID')}\n */\n\nwindow.DATA_TUGAS_OS = ${JSON.stringify(allTasks, null, 2)};\n`;
+
+      const blob = new Blob([fileContent], { type: "application/javascript;charset=utf-8" });
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = "data-tugas.js";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      alert("File 'data-tugas.js' berhasil di-download!\n\nLangkah Publikasi:\nPindahkan file 'data-tugas.js' ini ke dalam folder 'js/' di proyek portofolio Anda. Ketika di-upload / hosting, orang lain akan langsung bisa melihat tugas dan fotonya!");
+    }
+
+    // Synchronized Theme Manager (Dark / Light Mode)
+    const THEME_KEY = 'portfolio_theme_mode';
+    let isDark = localStorage.getItem(THEME_KEY) !== 'light';
+
+    function applyTheme(dark) {
+      isDark = dark;
+      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+
+      const themeToggle = document.getElementById('themeToggle');
+      const header = document.getElementById('mainHeader');
+      const taskHeroBanner = document.getElementById('taskHeroBanner');
+      const displayTitle = document.getElementById('displayTitle');
+      const displayDesc = document.getElementById('displayDesc');
+      const backBtnText = document.getElementById('backBtnText');
+      const backBtnIcon = document.getElementById('backBtnIcon');
+      const footer = document.getElementById('mainFooter');
+      const footerCopy = document.getElementById('footerCopy');
+
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('theme-light');
+        document.body.className = "bg-noir text-pearl font-sans antialiased selection:bg-ocean selection:text-noir transition-colors duration-300 min-h-screen flex flex-col";
+
+        themeToggle.className = "p-2.5 rounded-xl border bg-surface-card border-surface-border text-ocean hover:text-pearl hover:border-ocean/60 transition-all duration-200";
+        themeToggle.innerHTML = '<i data-lucide="sun" class="w-5 h-5 text-amber-300"></i>';
+        themeToggle.title = "Ganti ke Mode Terang";
+
+        header.className = "fixed top-0 left-0 right-0 z-50 bg-noir/90 backdrop-blur-md border-b border-surface-border shadow-xl shadow-noir/50 transition-colors duration-300";
+        taskHeroBanner.className = "relative rounded-3xl p-6 sm:p-10 mb-10 overflow-hidden border border-surface-border bg-gradient-to-br from-surface-card via-midnight/40 to-noir shadow-2xl transition-colors duration-300";
+        displayTitle.className = "text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-pearl leading-tight mb-4 transition-colors";
+        displayDesc.className = "text-pearl/80 text-sm sm:text-base leading-relaxed mb-6 font-light transition-colors";
+        backBtnText.className = "text-sm sm:text-base font-bold tracking-tight text-pearl group-hover:text-ocean transition-colors";
+        backBtnIcon.className = "w-9 h-9 rounded-xl bg-midnight/60 border border-ocean/40 flex items-center justify-center text-ocean group-hover:bg-ocean group-hover:text-noir transition-all duration-300";
+        footer.className = "border-t border-surface-border/60 bg-surface-darker py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300";
+        footerCopy.className = "text-pearl/60";
+
+        document.querySelectorAll('.content-card').forEach(card => {
+          card.className = "content-card rounded-2xl p-6 sm:p-8 bg-surface-card border border-surface-border shadow-lg transition-colors duration-300 text-pearl";
+        });
+        document.querySelectorAll('.content-heading').forEach(h => {
+          h.className = "text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading";
+        });
+        document.querySelectorAll('.tag-badge').forEach(el => {
+          el.className = "tag-badge text-[11px] px-2.5 py-1 rounded-md bg-midnight/40 text-ocean border border-ocean/20 font-mono";
+        });
+
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('theme-light');
+        document.body.className = "bg-pearl text-midnight font-sans antialiased selection:bg-ocean selection:text-noir transition-colors duration-300 min-h-screen flex flex-col";
+
+        themeToggle.className = "p-2.5 rounded-xl border bg-white border-surface-lightBorder text-midnight hover:border-ocean transition-all duration-200";
+        themeToggle.innerHTML = '<i data-lucide="moon" class="w-5 h-5 text-midnight"></i>';
+        themeToggle.title = "Ganti ke Mode Gelap";
+
+        header.className = "fixed top-0 left-0 right-0 z-50 bg-pearl/90 backdrop-blur-md border-b border-surface-lightBorder shadow-md transition-colors duration-300";
+        taskHeroBanner.className = "relative rounded-3xl p-6 sm:p-10 mb-10 overflow-hidden border border-surface-lightBorder bg-gradient-to-br from-white via-surface-light to-surface-lightCard shadow-xl transition-colors duration-300";
+        displayTitle.className = "text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-midnight leading-tight mb-4 transition-colors";
+        displayDesc.className = "text-midnight/80 text-sm sm:text-base leading-relaxed mb-6 font-light transition-colors";
+        backBtnText.className = "text-sm sm:text-base font-bold tracking-tight text-midnight group-hover:text-ocean transition-colors";
+        backBtnIcon.className = "w-9 h-9 rounded-xl bg-midnight/10 border border-ocean/40 flex items-center justify-center text-midnight group-hover:bg-ocean group-hover:text-white transition-all duration-300";
+        footer.className = "border-t border-surface-lightBorder bg-white py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300";
+        footerCopy.className = "text-midnight/70";
+
+        document.querySelectorAll('.content-card').forEach(card => {
+          card.className = "content-card rounded-2xl p-6 sm:p-8 bg-white border border-surface-lightBorder shadow-md transition-colors duration-300 text-midnight";
+        });
+        document.querySelectorAll('.content-heading').forEach(h => {
+          h.className = "text-lg sm:text-xl font-bold text-midnight flex items-center gap-2 content-heading";
+        });
+        document.querySelectorAll('.tag-badge').forEach(el => {
+          el.className = "tag-badge text-[11px] px-2.5 py-1 rounded-md bg-midnight/5 text-midnight border border-surface-lightBorder font-mono";
+        });
+      }
+
+      refreshIcons();
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      applyTheme(!isDark);
+    });
+
+    // Run init
+    initPage();
+    checkOwnerStatus();
+    applyTheme(isDark);
+  </script>
+</body>
+</html>

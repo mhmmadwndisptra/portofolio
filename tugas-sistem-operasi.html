@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tugas Sistem Operasi | Muhammad Wandi Saputra Nurhasan</title>
+  <meta name="description" content="Dokumentasi Tugas dan Proyek Praktikum Mata Kuliah Sistem Operasi oleh Muhammad Wandi Saputra Nurhasan.">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tugas Sistem Operasi | Muhammad Wandi Saputra Nurhasan">
+  <meta property="og:description" content="Kumpulan tugas, modul praktikum, dan dokumentasi Sistem Operasi.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#122C4F',
+            pearl: '#FBF9E4',
+            noir: '#000000',
+            ocean: '#5B88B2',
+            surface: {
+              dark: '#080d16',
+              darker: '#04070c',
+              card: '#0c1728',
+              border: '#1a3254',
+              light: '#f4f1d4',
+              lightCard: '#ffffff',
+              lightBorder: '#e2ddbc'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Times New Roman', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+
+  <!-- File Data Publik Tugas OS (Agar bisa dilihat semua orang) -->
+  <script src="js/data-tugas.js"></script>
+  <!-- Authentication Handler (Khusus Pemilik) -->
+  <script src="js/auth.js"></script>
+</head>
+<body class="bg-noir text-pearl font-sans antialiased selection:bg-ocean selection:text-noir transition-colors duration-300 min-h-screen flex flex-col">
+
+  <!-- Header / Navigation -->
+  <header id="mainHeader" class="fixed top-0 left-0 right-0 z-50 bg-noir/90 backdrop-blur-md border-b border-surface-border shadow-xl shadow-noir/50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        
+        <!-- Back to Portfolio Link -->
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div id="backBtnIcon" class="w-9 h-9 rounded-xl bg-midnight/60 border border-ocean/40 flex items-center justify-center text-ocean group-hover:bg-ocean group-hover:text-noir transition-all duration-300">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </div>
+          <div class="flex flex-col">
+            <span id="backBtnText" class="text-sm sm:text-base font-bold tracking-tight text-pearl group-hover:text-ocean transition-colors">
+              Kembali ke Portofolio
+            </span>
+            <span class="text-[11px] uppercase tracking-widest text-ocean font-medium">
+              Muhammad Wandi Saputra Nurhasan
+            </span>
+          </div>
+        </a>
+
+        <!-- Status Tag, Owner Auth & Theme Toggle -->
+        <div class="flex items-center gap-2.5">
+          <div id="statusBadge" class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-midnight/50 border border-ocean/30 text-xs text-ocean font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Mata Kuliah Sistem Operasi
+          </div>
+          
+          <!-- Tombol Pemilik / Owner Access -->
+          <button id="ownerAuthBtn" onclick="handleOwnerAuthClick()" class="px-3 py-1.5 rounded-xl border border-ocean/30 bg-surface-card hover:border-ocean text-xs font-semibold text-ocean transition-all flex items-center gap-1.5" title="Akses Khusus Pemilik Portofolio">
+            <i data-lucide="lock" id="ownerAuthIcon" class="w-3.5 h-3.5"></i>
+            <span id="ownerAuthLabel">Masuk Pemilik</span>
+          </button>
+
+          <button id="themeToggle" class="p-2.5 rounded-xl border bg-surface-card border-surface-border text-ocean hover:text-pearl hover:border-ocean/60 transition-all duration-200" title="Ganti Mode" aria-label="Toggle theme">
+            <i data-lucide="sun" id="themeIcon" class="w-5 h-5 text-amber-300"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    
+    <!-- Hero Banner Tugas Sistem Operasi -->
+    <div id="heroBanner" class="relative rounded-3xl p-6 sm:p-10 md:p-12 mb-12 overflow-hidden border border-surface-border bg-gradient-to-br from-surface-card via-midnight/40 to-noir shadow-2xl transition-colors duration-300">
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-ocean/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-midnight/30 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center w-full">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ocean/15 border border-ocean/30 text-ocean text-xs font-semibold uppercase tracking-wider mb-4">
+          <i data-lucide="terminal" class="w-4 h-4"></i>
+          Academic Showcase & Documentation
+        </div>
+        <h1 id="heroTitle" class="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-pearl leading-tight mb-4 transition-colors">
+          Tugas & Praktikum <span class="text-ocean">Sistem Operasi</span>
+        </h1>
+        <p id="heroSubtitle" class="text-pearl/80 text-sm sm:text-base md:text-lg leading-relaxed mb-8 font-light max-w-2xl mx-auto transition-colors">
+          Halaman arsip dan dokumentasi pengerjaan tugas berkas dalam perkuliahan Sistem Operasi.
+        </p>
+        
+        <div id="bannerStats" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-surface-border/60 w-full">
+          <div class="stat-box bg-noir/40 backdrop-blur rounded-xl p-3 border border-surface-border/40 text-center transition-colors">
+            <div class="text-xs text-ocean mb-1">Mahasiswa</div>
+            <div class="stat-val text-xs sm:text-sm font-semibold text-pearl truncate">Muhammad Wandi Saputra N</div>
+          </div>
+          <div class="stat-box bg-noir/40 backdrop-blur rounded-xl p-3 border border-surface-border/40 text-center transition-colors">
+            <div class="text-xs text-ocean mb-1">Mata Kuliah</div>
+            <div class="stat-val text-xs sm:text-sm font-semibold text-pearl">Sistem Operasi</div>
+          </div>
+          <div class="stat-box bg-noir/40 backdrop-blur rounded-xl p-3 border border-surface-border/40 text-center transition-colors">
+            <div class="text-xs text-ocean mb-1">Program Studi</div>
+            <div class="stat-val text-xs sm:text-sm font-semibold text-pearl truncate">Teknik Informatika</div>
+          </div>
+          <div class="stat-box bg-noir/40 backdrop-blur rounded-xl p-3 border border-surface-border/40 text-center transition-colors">
+            <div class="text-xs text-ocean mb-1">Nomor Induk Mahasiswa</div>
+            <div class="stat-val text-xs sm:text-sm font-semibold text-pearl truncate">2503010050</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header / Judul Seksi + Tombol Tambah Tugas & Export Data -->
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h2 id="sectionTitle" class="text-xl sm:text-2xl font-serif font-bold text-pearl transition-colors">Daftar Tugas</h2>
+        <p id="sectionSubtitle" class="text-xs sm:text-sm text-pearl/70 transition-colors">Pilih untuk meninjau materi dan hasil tugas</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button onclick="exportDataTugasFile()" id="exportDataBtn" title="Download data-tugas.js agar bisa dilihat orang lain saat diupload ke internet" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-ocean/40 bg-midnight/40 hover:bg-ocean/20 text-ocean font-semibold text-xs sm:text-sm transition-all duration-300">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Publikasikan / Download Data</span>
+        </button>
+        <button onclick="openAddTaskModal()" id="addTaskBtn" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-ocean hover:bg-ocean/90 text-noir font-semibold text-xs sm:text-sm shadow-lg shadow-ocean/20 transition-all duration-300 hover:-translate-y-0.5">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Tambah Tugas Baru</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid Tugas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tasksGrid">
+      
+      <!-- Placeholder ketika belum ada tugas yang ditambahkan -->
+      <div id="emptyTaskPlaceholder" class="col-span-full py-16 px-6 text-center rounded-3xl border border-dashed border-surface-border bg-surface-card/40 flex flex-col items-center justify-center transition-colors">
+        <div class="w-14 h-14 rounded-2xl bg-midnight/50 border border-ocean/30 flex items-center justify-center text-ocean mb-4">
+          <i data-lucide="folder-open" class="w-7 h-7"></i>
+        </div>
+        <h3 class="text-base sm:text-lg font-bold text-pearl mb-1 placeholder-title">Belum Ada Tugas Ditambahkan</h3>
+        <p class="text-xs sm:text-sm text-pearl/60 max-w-md mb-5 placeholder-subtitle">Klik tombol di bawah ini untuk menambahkan tugas baru dan langsung mengisi materi tugasnya.</p>
+        <button onclick="openAddTaskModal()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-ocean hover:bg-ocean/90 text-noir font-semibold text-xs sm:text-sm shadow-lg shadow-ocean/20 transition-all">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Tambah Tugas Pertama</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal Login Pemilik (Owner Access) -->
+  <div id="ownerAuthModal" class="fixed inset-0 z-50 hidden bg-noir/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="ownerModalBox" class="bg-surface-card border border-surface-border rounded-2xl max-w-sm w-full p-6 shadow-2xl relative transition-colors duration-300">
+      <button onclick="closeOwnerAuthModal()" class="absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-pearl owner-text">Autentikasi Pemilik</h3>
+          <p class="text-[11px] text-pearl/60 owner-subtext">Hanya pemilik portofolio yang dapat mengedit</p>
+        </div>
+      </div>
+
+      <form id="ownerLoginForm" onsubmit="handleOwnerLoginSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-ocean">Kata Sandi Pemilik</label>
+          <input type="password" id="ownerPasswordInput" required placeholder="Masukkan kata sandi..." class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs transition">
+        </div>
+        <p id="ownerAuthError" class="hidden text-rose-400 text-xs">Kata sandi salah. Silakan coba lagi.</p>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeOwnerAuthModal()" class="px-4 py-2 rounded-xl border border-surface-border text-pearl/70 hover:text-pearl text-xs font-semibold transition">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-ocean text-noir font-bold text-xs hover:bg-ocean/90 transition shadow">Masuk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Tugas Baru -->
+  <div id="addTaskModal" class="fixed inset-0 z-50 hidden bg-noir/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="addTaskModalBox" class="bg-surface-card border border-surface-border rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative transition-colors duration-300">
+      <button onclick="closeAddTaskModal()" id="addTaskCloseBtn" class="absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      
+      <div class="flex items-center gap-3 mb-6">
+        <div id="addTaskIconBox" class="w-11 h-11 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean">
+          <i data-lucide="plus-circle" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 id="addTaskModalTitle" class="text-lg font-bold text-pearl">Tambah Tugas Baru</h3>
+          <p id="addTaskModalSubtitle" class="text-xs text-pearl/60">Isi informasi tugas yang ingin ditambahkan</p>
+        </div>
+      </div>
+
+      <form id="addTaskForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-ocean">Nomor / Modul Tugas</label>
+          <input type="text" id="taskModulInput" required placeholder="Contoh: Tugas 02 • Praktikum" class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-ocean">Judul Tugas</label>
+          <input type="text" id="taskTitleInput" required placeholder="Contoh: Manajemen Berkas & Bash CLI" class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-ocean">Deskripsi Singkat</label>
+          <textarea id="taskDescInput" rows="3" required placeholder="Tuliskan ringkasan materi atau tujuan tugas ini..." class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-ocean">Tag / Kata Kunci (Pisahkan dengan koma)</label>
+          <input type="text" id="taskTagsInput" placeholder="Contoh: Linux, Bash, Terminal" class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-ocean">Tautan Berkas Eksternal (Opsional)</label>
+          <input type="text" id="taskLinkInput" placeholder="Kosongkan untuk otomatis membuat halaman isi tugas interaktif..." class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition">
+          <p class="text-[11px] text-pearl/50 mt-1">Jika dikosongkan, tugas akan otomatis membuka halaman editor isi tugas baru.</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3">
+          <button type="button" onclick="closeAddTaskModal()" id="addTaskCancelBtn" class="px-4 py-2 rounded-xl border border-surface-border text-pearl/80 hover:text-pearl text-xs font-semibold transition">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-ocean text-noir font-bold text-xs sm:text-sm hover:bg-ocean/90 shadow-md transition">Simpan Tugas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Detail Tugas -->
+  <div id="taskModal" class="fixed inset-0 z-50 hidden bg-noir/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="modalBox" class="bg-surface-card border border-surface-border rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative transition-colors duration-300">
+      <button onclick="closeModal()" id="modalCloseBtn" class="absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div id="modalIconBox" class="w-12 h-12 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean mb-4 transition-colors">
+        <i data-lucide="file-text" class="w-6 h-6"></i>
+      </div>
+      <h3 id="modalTitle" class="text-xl font-bold text-pearl mb-2 transition-colors">Judul Tugas</h3>
+      <p id="modalDesc" class="text-sm text-pearl/80 leading-relaxed mb-6 transition-colors">Deskripsi tugas...</p>
+      <div class="flex justify-end gap-3">
+        <button onclick="closeModal()" id="modalDismissBtn" class="px-4 py-2 rounded-xl border border-surface-border text-pearl/80 hover:text-pearl text-xs font-semibold transition">Tutup</button>
+        <a href="index.html#contact" class="px-4 py-2 rounded-xl bg-ocean text-noir hover:bg-ocean/90 text-xs font-semibold transition">Hubungi Mahasiswa</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="mainFooter" class="border-t border-surface-border/60 bg-surface-darker py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-pearl/60">
+      <p id="footerCopy">© 2026 Muhammad Wandi Saputra Nurhasan. Praktikum & Tugas Sistem Operasi.</p>
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="hover:text-ocean transition">Beranda Portofolio</a>
+        <span>•</span>
+        <a href="https://www.instagram.com/mhmmadwndisptra_/" target="_blank" class="hover:text-ocean transition">Instagram</a>
+        <span>•</span>
+        <a href="https://www.tiktok.com/@mhmmadwndisptra" target="_blank" class="hover:text-ocean transition">TikTok</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Inisialisasi ikon Lucide
+    function refreshIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+    refreshIcons();
+
+    // Modal Handler
+    const modal = document.getElementById('taskModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+
+    function openModal(title, desc) {
+      modalTitle.textContent = title;
+      modalDesc.textContent = desc;
+      modal.classList.remove('hidden');
+      refreshIcons();
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+    }
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Modal Tambah Tugas Handler
+    const addTaskModal = document.getElementById('addTaskModal');
+    const addTaskForm = document.getElementById('addTaskForm');
+    const tasksGrid = document.getElementById('tasksGrid');
+
+    function openAddTaskModal() {
+      addTaskModal.classList.remove('hidden');
+      document.getElementById('taskModulInput').focus();
+      refreshIcons();
+    }
+
+    function closeAddTaskModal() {
+      addTaskModal.classList.add('hidden');
+      addTaskForm.reset();
+    }
+
+    addTaskModal.addEventListener('click', (e) => {
+      if (e.target === addTaskModal) closeAddTaskModal();
+    });
+
+    // ==================== OWNER AUTHENTICATION LOGIC ====================
+    const ownerAuthModal = document.getElementById('ownerAuthModal');
+    const ownerPasswordInput = document.getElementById('ownerPasswordInput');
+    const ownerAuthError = document.getElementById('ownerAuthError');
+    const ownerAuthBtn = document.getElementById('ownerAuthBtn');
+    const ownerAuthLabel = document.getElementById('ownerAuthLabel');
+    const ownerAuthIcon = document.getElementById('ownerAuthIcon');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    const exportDataBtn = document.getElementById('exportDataBtn');
+
+    function checkOwnerStatus() {
+      const isOwner = window.PORTFOLIO_AUTH && window.PORTFOLIO_AUTH.isOwner();
+
+      if (isOwner) {
+        ownerAuthLabel.textContent = "Keluar Pemilik";
+        ownerAuthBtn.className = "px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all flex items-center gap-1.5";
+        ownerAuthBtn.title = "Klik untuk keluar dari Mode Pemilik";
+        if (addTaskBtn) addTaskBtn.style.display = 'inline-flex';
+        if (exportDataBtn) exportDataBtn.style.display = 'inline-flex';
+        document.querySelectorAll('.owner-only-action').forEach(el => el.style.display = 'inline-block');
+      } else {
+        ownerAuthLabel.textContent = "Masuk Pemilik";
+        ownerAuthBtn.className = "px-3 py-1.5 rounded-xl border border-ocean/30 bg-surface-card hover:border-ocean text-xs font-semibold text-ocean transition-all flex items-center gap-1.5";
+        ownerAuthBtn.title = "Akses Khusus Pemilik Portofolio";
+        if (addTaskBtn) addTaskBtn.style.display = 'none';
+        if (exportDataBtn) exportDataBtn.style.display = 'none';
+        document.querySelectorAll('.owner-only-action').forEach(el => el.style.display = 'none');
+      }
+      refreshIcons();
+    }
+
+    function handleOwnerAuthClick() {
+      const isOwner = window.PORTFOLIO_AUTH && window.PORTFOLIO_AUTH.isOwner();
+      if (isOwner) {
+        if (confirm("Keluar dari Mode Pemilik? Fitur tambah dan edit akan disembunyikan.")) {
+          window.PORTFOLIO_AUTH.logout();
+          checkOwnerStatus();
+        }
+      } else {
+        openOwnerAuthModal();
+      }
+    }
+
+    function openOwnerAuthModal() {
+      ownerAuthModal.classList.remove('hidden');
+      ownerPasswordInput.value = '';
+      ownerAuthError.classList.add('hidden');
+      ownerPasswordInput.focus();
+      refreshIcons();
+    }
+
+    function closeOwnerAuthModal() {
+      ownerAuthModal.classList.add('hidden');
+    }
+
+    ownerAuthModal.addEventListener('click', (e) => {
+      if (e.target === ownerAuthModal) closeOwnerAuthModal();
+    });
+
+    function handleOwnerLoginSubmit(e) {
+      e.preventDefault();
+      const val = ownerPasswordInput.value.trim();
+      if (window.PORTFOLIO_AUTH && window.PORTFOLIO_AUTH.login(val)) {
+        closeOwnerAuthModal();
+        checkOwnerStatus();
+        alert("Selamat datang kembali, Pemilik! Fitur edit, tambah tugas, dan download data kini aktif.");
+      } else {
+        ownerAuthError.classList.remove('hidden');
+      }
+    }
+
+    // LocalStorage Key for Extra Tasks
+    const LOCAL_TASKS_KEY = 'portfolio_custom_os_tasks';
+    const DELETED_TASKS_KEY = 'portfolio_deleted_os_tasks';
+
+    // Bersihkan otomatis ID lama jika masih tersangkut di browser
+    (function cleanupOldTestTasks() {
+      const obsoleteIds = ['task_1794478172169', 'task_1794479643008'];
+      try {
+        let local = JSON.parse(localStorage.getItem(LOCAL_TASKS_KEY)) || [];
+        if (Array.isArray(local) && local.length > 0) {
+          const filtered = local.filter(t => !obsoleteIds.includes(t.id));
+          if (filtered.length !== local.length) {
+            localStorage.setItem(LOCAL_TASKS_KEY, JSON.stringify(filtered));
+          }
+        }
+      } catch (e) {}
+    })();
+
+    function getDeletedTaskIds() {
+      try {
+        return JSON.parse(localStorage.getItem(DELETED_TASKS_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function addDeletedTaskId(id) {
+      const deleted = getDeletedTaskIds();
+      if (!deleted.includes(id)) {
+        deleted.push(id);
+        localStorage.setItem(DELETED_TASKS_KEY, JSON.stringify(deleted));
+      }
+    }
+
+    function getStoredTasks() {
+      // Prioritaskan data dari file publik window.DATA_TUGAS_OS yang sudah dipublikasikan
+      const publicTasks = Array.isArray(window.DATA_TUGAS_OS) ? window.DATA_TUGAS_OS : [];
+      let localTasks = [];
+      try {
+        localTasks = JSON.parse(localStorage.getItem(LOCAL_TASKS_KEY)) || [];
+      } catch (e) {
+        localTasks = [];
+      }
+
+      const deletedIds = getDeletedTaskIds();
+
+      // Gabungkan data publik dan lokal (hindari duplikasi berdasarkan id)
+      const mergedMap = new Map();
+      publicTasks.forEach(t => {
+        if (!deletedIds.includes(t.id)) mergedMap.set(t.id, t);
+      });
+      localTasks.forEach(t => {
+        if (!deletedIds.includes(t.id)) mergedMap.set(t.id, t);
+      });
+
+      return Array.from(mergedMap.values());
+    }
+
+    function saveStoredTasks(tasks) {
+      localStorage.setItem(LOCAL_TASKS_KEY, JSON.stringify(tasks));
+    }
+
+    // Fungsi Export File data-tugas.js agar orang lain bisa melihat
+    function exportDataTugasFile() {
+      const allTasks = getStoredTasks();
+      if (allTasks.length === 0) {
+        alert("Belum ada tugas yang dibuat. Silakan tambahkan tugas terlebih dahulu sebelum download.");
+        return;
+      }
+
+      const fileContent = `/**\n * File Data Publik Tugas Sistem Operasi\n * Muhammad Wandi Saputra Nurhasan (2503010050)\n * Terakhir Diperbarui: ${new Date().toLocaleString('id-ID')}\n */\n\nwindow.DATA_TUGAS_OS = ${JSON.stringify(allTasks, null, 2)};\n`;
+
+      const blob = new Blob([fileContent], { type: "application/javascript;charset=utf-8" });
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = "data-tugas.js";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      alert("File 'data-tugas.js' berhasil di-download!\n\nLangkah Publikasi:\nPindahkan file 'data-tugas.js' ini ke dalam folder 'js/' di proyek portofolio Anda. Ketika di-upload / hosting, orang lain akan langsung bisa melihat tugas dan fotonya!");
+    }
+
+    function renderTaskCard(task, index) {
+      const card = document.createElement('article');
+      card.className = "task-card group flex flex-col justify-between rounded-2xl p-6 bg-surface-card border border-surface-border hover:border-ocean/60 transition-all duration-300 hover:-translate-y-1 shadow-lg relative";
+      card.setAttribute('data-category', 'praktikum');
+      card.setAttribute('data-id', task.id);
+
+      const tagHtml = task.tags.map(t => `<span class="tag-badge text-[11px] px-2 py-0.5 rounded bg-midnight/40 text-ocean border border-ocean/20 font-mono">${t}</span>`).join(' ');
+
+      const targetUrl = task.link || `isi-tugas.html?id=${task.id}`;
+      const linkBtn = `<a href="${targetUrl}" class="text-ocean hover:text-pearl font-semibold inline-flex items-center gap-1 group/btn transition-colors">
+            Buka Isi Tugas <i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-1"></i>
+           </a>`;
+
+      card.innerHTML = `
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <i data-lucide="file-check" class="w-3.5 h-3.5"></i>
+              ${task.modul}
+            </span>
+            <button onclick="deleteCustomTask('${task.id}')" title="Hapus Tugas Ini" class="owner-only-action text-pearl/40 hover:text-rose-400 transition p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <h3 class="card-title text-lg font-bold text-pearl group-hover:text-ocean transition-colors mb-2">
+            ${task.title}
+          </h3>
+          <p class="card-desc text-xs sm:text-sm text-pearl/75 leading-relaxed mb-4 transition-colors">
+            ${task.desc}
+          </p>
+          <div class="flex flex-wrap gap-1.5 mb-5">
+            ${tagHtml}
+          </div>
+        </div>
+        <div class="card-footer pt-4 border-t border-surface-border/50 flex items-center justify-between text-xs transition-colors">
+          <span class="text-emerald-500 font-semibold flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Tersimpan
+          </span>
+          ${linkBtn}
+        </div>
+      `;
+
+      return card;
+    }
+
+    function updatePlaceholderVisibility() {
+      const placeholder = document.getElementById('emptyTaskPlaceholder');
+      const hasCards = tasksGrid.querySelectorAll('.task-card').length > 0;
+      if (placeholder) {
+        placeholder.style.display = hasCards ? 'none' : 'flex';
+      }
+    }
+
+    function loadCustomTasks() {
+      const stored = getStoredTasks();
+      stored.forEach(task => {
+        const el = renderTaskCard(task);
+        tasksGrid.appendChild(el);
+      });
+      updatePlaceholderVisibility();
+      refreshIcons();
+    }
+
+    function deleteCustomTask(id) {
+      if (!confirm("Apakah Anda yakin ingin menghapus tugas ini?")) return;
+      addDeletedTaskId(id);
+      let tasks = getStoredTasks();
+      tasks = tasks.filter(t => t.id !== id);
+      saveStoredTasks(tasks);
+
+      // Remove from DOM
+      const card = document.querySelector(`[data-id="${id}"]`);
+      if (card) card.remove();
+      updatePlaceholderVisibility();
+      refreshIcons();
+    }
+
+    addTaskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const modul = document.getElementById('taskModulInput').value.trim();
+      const title = document.getElementById('taskTitleInput').value.trim();
+      const desc = document.getElementById('taskDescInput').value.trim();
+      const tagsRaw = document.getElementById('taskTagsInput').value.trim();
+      const link = document.getElementById('taskLinkInput').value.trim();
+
+      const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : ['Sistem Operasi'];
+
+      const newTask = {
+        id: 'task_' + Date.now(),
+        modul,
+        title,
+        desc,
+        tags,
+        link,
+        content: {
+          summary: '<p>Tuliskan ringkasan materi dan penjelasan hasil pengerjaan tugas di sini...</p>',
+          code: '# Tuliskan kode program atau output terminal di sini\n$ ',
+          notes: '<p>• Catatan dan kesimpulan praktikum.</p>'
+        }
+      };
+
+      const tasks = getStoredTasks();
+      tasks.push(newTask);
+      saveStoredTasks(tasks);
+
+      closeAddTaskModal();
+
+      // Langsung arahkan pengguna ke halaman pengisian tugas baru
+      const targetUrl = link || `isi-tugas.html?id=${newTask.id}`;
+      window.location.href = targetUrl;
+    });
+
+    // Synchronized Theme Manager (Dark / Light Mode)
+    const THEME_KEY = 'portfolio_theme_mode';
+    let isDark = localStorage.getItem(THEME_KEY) !== 'light';
+
+    function applyTheme(dark) {
+      isDark = dark;
+      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+
+      const themeToggle = document.getElementById('themeToggle');
+      const header = document.getElementById('mainHeader');
+      const heroBanner = document.getElementById('heroBanner');
+      const heroTitle = document.getElementById('heroTitle');
+      const heroSubtitle = document.getElementById('heroSubtitle');
+      const backBtnText = document.getElementById('backBtnText');
+      const backBtnIcon = document.getElementById('backBtnIcon');
+      const statusBadge = document.getElementById('statusBadge');
+      const sectionTitle = document.getElementById('sectionTitle');
+      const sectionSubtitle = document.getElementById('sectionSubtitle');
+      const footer = document.getElementById('mainFooter');
+      const footerCopy = document.getElementById('footerCopy');
+      const modalBox = document.getElementById('modalBox');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const modalIconBox = document.getElementById('modalIconBox');
+      const modalDismissBtn = document.getElementById('modalDismissBtn');
+
+      const addTaskModalBox = document.getElementById('addTaskModalBox');
+      const addTaskCloseBtn = document.getElementById('addTaskCloseBtn');
+      const addTaskIconBox = document.getElementById('addTaskIconBox');
+      const addTaskModalTitle = document.getElementById('addTaskModalTitle');
+      const addTaskModalSubtitle = document.getElementById('addTaskModalSubtitle');
+      const addTaskCancelBtn = document.getElementById('addTaskCancelBtn');
+      const addFormInputs = document.querySelectorAll('#addTaskForm input, #addTaskForm textarea');
+
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('theme-light');
+        document.body.className = "bg-noir text-pearl font-sans antialiased selection:bg-ocean selection:text-noir transition-colors duration-300 min-h-screen flex flex-col";
+
+        themeToggle.className = "p-2.5 rounded-xl border bg-surface-card border-surface-border text-ocean hover:text-pearl hover:border-ocean/60 transition-all duration-200";
+        themeToggle.innerHTML = '<i data-lucide="sun" class="w-5 h-5 text-amber-300"></i>';
+        themeToggle.title = "Ganti ke Mode Terang";
+
+        header.className = "fixed top-0 left-0 right-0 z-50 bg-noir/90 backdrop-blur-md border-b border-surface-border shadow-xl shadow-noir/50 transition-colors duration-300";
+        heroBanner.className = "relative rounded-3xl p-6 sm:p-10 md:p-12 mb-12 overflow-hidden border border-surface-border bg-gradient-to-br from-surface-card via-midnight/40 to-noir shadow-2xl transition-colors duration-300";
+        heroTitle.className = "text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-pearl leading-tight mb-4 transition-colors";
+        heroSubtitle.className = "text-pearl/80 text-sm sm:text-base md:text-lg leading-relaxed mb-6 font-light transition-colors";
+        backBtnText.className = "text-sm sm:text-base font-bold tracking-tight text-pearl group-hover:text-ocean transition-colors";
+        backBtnIcon.className = "w-9 h-9 rounded-xl bg-midnight/60 border border-ocean/40 flex items-center justify-center text-ocean group-hover:bg-ocean group-hover:text-noir transition-all duration-300";
+        statusBadge.className = "hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-midnight/50 border border-ocean/30 text-xs text-ocean font-medium";
+        sectionTitle.className = "text-xl sm:text-2xl font-serif font-bold text-pearl transition-colors";
+        sectionSubtitle.className = "text-xs sm:text-sm text-pearl/70 transition-colors";
+        footer.className = "border-t border-surface-border/60 bg-surface-darker py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300";
+        footerCopy.className = "text-pearl/60";
+
+        if (modalBox) {
+          modalBox.className = "bg-surface-card border border-surface-border rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative transition-colors duration-300 text-pearl";
+          modalCloseBtn.className = "absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition";
+          modalIconBox.className = "w-12 h-12 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean mb-4 transition-colors";
+          modalTitle.className = "text-xl font-bold text-pearl mb-2 transition-colors";
+          modalDesc.className = "text-sm text-pearl/80 leading-relaxed mb-6 transition-colors";
+          modalDismissBtn.className = "px-4 py-2 rounded-xl border border-surface-border text-pearl/80 hover:text-pearl text-xs font-semibold transition";
+        }
+
+        if (addTaskModalBox) {
+          addTaskModalBox.className = "bg-surface-card border border-surface-border rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative transition-colors duration-300 text-pearl";
+          addTaskCloseBtn.className = "absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition";
+          addTaskIconBox.className = "w-11 h-11 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean";
+          addTaskModalTitle.className = "text-lg font-bold text-pearl";
+          addTaskModalSubtitle.className = "text-xs text-pearl/60";
+          addTaskCancelBtn.className = "px-4 py-2 rounded-xl border border-surface-border text-pearl/80 hover:text-pearl text-xs font-semibold transition";
+          addFormInputs.forEach(inp => {
+            inp.className = "w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition";
+          });
+        }
+
+        const placeholder = document.getElementById('emptyTaskPlaceholder');
+        if (placeholder) {
+          placeholder.className = "col-span-full py-16 px-6 text-center rounded-3xl border border-dashed border-surface-border bg-surface-card/40 flex flex-col items-center justify-center transition-colors";
+          const pTitle = placeholder.querySelector('.placeholder-title');
+          const pSub = placeholder.querySelector('.placeholder-subtitle');
+          if (pTitle) pTitle.className = "text-base sm:text-lg font-bold text-pearl mb-1 placeholder-title";
+          if (pSub) pSub.className = "text-xs sm:text-sm text-pearl/60 max-w-md mb-5 placeholder-subtitle";
+        }
+
+        document.querySelectorAll('.stat-box').forEach(el => {
+          el.className = "stat-box bg-noir/40 backdrop-blur rounded-xl p-3 border border-surface-border/40 text-center transition-colors";
+        });
+        document.querySelectorAll('.stat-val').forEach(el => {
+          el.className = "stat-val text-xs sm:text-sm font-semibold text-pearl truncate";
+        });
+
+        document.querySelectorAll('.task-card').forEach(card => {
+          const isFeatured = card.getAttribute('data-category') === 'teori' && card.querySelector('.fa-award, [data-lucide="award"]');
+          card.className = `task-card group flex flex-col justify-between rounded-2xl p-6 ${isFeatured ? 'border-2 border-ocean/50' : 'border border-surface-border'} bg-surface-card hover:border-ocean transition-all duration-300 hover:-translate-y-1 shadow-lg`;
+        });
+
+        document.querySelectorAll('.card-title').forEach(el => {
+          el.className = "card-title text-lg font-bold text-pearl group-hover:text-ocean transition-colors mb-2";
+        });
+        document.querySelectorAll('.card-desc').forEach(el => {
+          el.className = "card-desc text-xs sm:text-sm text-pearl/75 leading-relaxed mb-4 transition-colors";
+        });
+        document.querySelectorAll('.card-num').forEach(el => {
+          el.className = "card-num text-xs text-pearl/50 font-mono transition-colors";
+        });
+        document.querySelectorAll('.card-footer').forEach(el => {
+          el.className = "card-footer pt-4 border-t border-surface-border/50 flex items-center justify-between text-xs transition-colors";
+        });
+        document.querySelectorAll('.tag-badge').forEach(el => {
+          el.className = "tag-badge text-[11px] px-2 py-0.5 rounded bg-midnight/40 text-ocean border border-ocean/20 font-mono";
+        });
+
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('theme-light');
+        document.body.className = "bg-pearl text-midnight font-sans antialiased selection:bg-ocean selection:text-noir transition-colors duration-300 min-h-screen flex flex-col";
+
+        themeToggle.className = "p-2.5 rounded-xl border bg-white border-surface-lightBorder text-midnight hover:border-ocean transition-all duration-200";
+        themeToggle.innerHTML = '<i data-lucide="moon" class="w-5 h-5 text-midnight"></i>';
+        themeToggle.title = "Ganti ke Mode Gelap";
+
+        header.className = "fixed top-0 left-0 right-0 z-50 bg-pearl/90 backdrop-blur-md border-b border-surface-lightBorder shadow-md transition-colors duration-300";
+        heroBanner.className = "relative rounded-3xl p-6 sm:p-10 md:p-12 mb-12 overflow-hidden border border-surface-lightBorder bg-gradient-to-br from-white via-surface-light to-surface-lightCard shadow-xl transition-colors duration-300";
+        heroTitle.className = "text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-midnight leading-tight mb-4 transition-colors";
+        heroSubtitle.className = "text-midnight/80 text-sm sm:text-base md:text-lg leading-relaxed mb-6 font-light transition-colors";
+        backBtnText.className = "text-sm sm:text-base font-bold tracking-tight text-midnight group-hover:text-ocean transition-colors";
+        backBtnIcon.className = "w-9 h-9 rounded-xl bg-midnight/10 border border-ocean/40 flex items-center justify-center text-midnight group-hover:bg-ocean group-hover:text-white transition-all duration-300";
+        statusBadge.className = "hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-midnight/10 border border-ocean/30 text-xs text-midnight font-medium";
+        sectionTitle.className = "text-xl sm:text-2xl font-serif font-bold text-midnight transition-colors";
+        sectionSubtitle.className = "text-xs sm:text-sm text-midnight/70 transition-colors";
+        footer.className = "border-t border-surface-lightBorder bg-white py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300";
+        footerCopy.className = "text-midnight/70";
+
+        if (modalBox) {
+          modalBox.className = "bg-white border border-surface-lightBorder rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative transition-colors duration-300 text-midnight";
+          modalCloseBtn.className = "absolute top-4 right-4 p-2 text-midnight/60 hover:text-midnight transition";
+          modalIconBox.className = "w-12 h-12 rounded-xl bg-midnight/10 border border-ocean/30 flex items-center justify-center text-midnight mb-4 transition-colors";
+          modalTitle.className = "text-xl font-bold text-midnight mb-2 transition-colors";
+          modalDesc.className = "text-sm text-midnight/80 leading-relaxed mb-6 transition-colors";
+          modalDismissBtn.className = "px-4 py-2 rounded-xl border border-surface-lightBorder text-midnight/80 hover:text-midnight text-xs font-semibold transition";
+        }
+
+        if (addTaskModalBox) {
+          addTaskModalBox.className = "bg-white border border-surface-lightBorder rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative transition-colors duration-300 text-midnight";
+          addTaskCloseBtn.className = "absolute top-4 right-4 p-2 text-midnight/60 hover:text-midnight transition";
+          addTaskIconBox.className = "w-11 h-11 rounded-xl bg-midnight/10 border border-ocean/30 flex items-center justify-center text-midnight";
+          addTaskModalTitle.className = "text-lg font-bold text-midnight";
+          addTaskModalSubtitle.className = "text-xs text-midnight/60";
+          addTaskCancelBtn.className = "px-4 py-2 rounded-xl border border-surface-lightBorder text-midnight/80 hover:text-midnight text-xs font-semibold transition";
+          addFormInputs.forEach(inp => {
+            inp.className = "w-full px-3.5 py-2.5 rounded-xl bg-surface-light/40 border border-surface-lightBorder text-midnight placeholder-midnight/40 focus:outline-none focus:border-ocean text-xs sm:text-sm transition";
+          });
+        }
+
+        const placeholder = document.getElementById('emptyTaskPlaceholder');
+        if (placeholder) {
+          placeholder.className = "col-span-full py-16 px-6 text-center rounded-3xl border border-dashed border-surface-lightBorder bg-white/60 flex flex-col items-center justify-center transition-colors";
+          const pTitle = placeholder.querySelector('.placeholder-title');
+          const pSub = placeholder.querySelector('.placeholder-subtitle');
+          if (pTitle) pTitle.className = "text-base sm:text-lg font-bold text-midnight mb-1 placeholder-title";
+          if (pSub) pSub.className = "text-xs sm:text-sm text-midnight/60 max-w-md mb-5 placeholder-subtitle";
+        }
+
+        document.querySelectorAll('.stat-box').forEach(el => {
+          el.className = "stat-box bg-white/70 backdrop-blur rounded-xl p-3 border border-surface-lightBorder text-center transition-colors";
+        });
+        document.querySelectorAll('.stat-val').forEach(el => {
+          el.className = "stat-val text-xs sm:text-sm font-semibold text-midnight truncate";
+        });
+
+        document.querySelectorAll('.task-card').forEach(card => {
+          const isFeatured = card.getAttribute('data-category') === 'teori' && card.querySelector('.fa-award, [data-lucide="award"]');
+          card.className = `task-card group flex flex-col justify-between rounded-2xl p-6 ${isFeatured ? 'border-2 border-ocean' : 'border border-surface-lightBorder'} bg-white hover:border-ocean transition-all duration-300 hover:-translate-y-1 shadow-md`;
+        });
+
+        document.querySelectorAll('.card-title').forEach(el => {
+          el.className = "card-title text-lg font-bold text-midnight group-hover:text-ocean transition-colors mb-2";
+        });
+        document.querySelectorAll('.card-desc').forEach(el => {
+          el.className = "card-desc text-xs sm:text-sm text-midnight/75 leading-relaxed mb-4 transition-colors";
+        });
+        document.querySelectorAll('.card-num').forEach(el => {
+          el.className = "card-num text-xs text-midnight/50 font-mono transition-colors";
+        });
+        document.querySelectorAll('.card-footer').forEach(el => {
+          el.className = "card-footer pt-4 border-t border-surface-lightBorder flex items-center justify-between text-xs transition-colors";
+        });
+        document.querySelectorAll('.tag-badge').forEach(el => {
+          el.className = "tag-badge text-[11px] px-2 py-0.5 rounded bg-midnight/5 text-midnight border border-surface-lightBorder font-mono";
+        });
+      }
+
+      refreshIcons();
+    }
+
+    // Toggle button click listener
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      applyTheme(!isDark);
+    });
+
+    // Load stored custom tasks on startup
+    loadCustomTasks();
+
+    // Check owner access state on load
+    checkOwnerStatus();
+
+    // Run applyTheme on initial load
+    applyTheme(isDark);
+  </script>
+</body>
+</html>
