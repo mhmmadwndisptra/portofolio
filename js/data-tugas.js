@@ -1,7 +1,7 @@
 /**
  * File Data Publik Tugas Sistem Operasi
  * Muhammad Wandi Saputra Nurhasan (2503010050)
- * Terakhir Diperbarui: 12/11/2026, 20.05.43
+ * Terakhir Diperbarui: 12/11/2026, 20.09.49
  */
 
 window.DATA_TUGAS_OS = [
@@ -27,6 +27,21 @@ window.DATA_TUGAS_OS = [
     "desc": "percobaan pengetesan",
     "tags": [
       "test"
+    ],
+    "link": "",
+    "content": {
+      "summary": "<p>Tuliskan ringkasan materi dan penjelasan hasil pengerjaan tugas di sini...</p>",
+      "code": "# Tuliskan kode program atau output terminal di sini\n$ ",
+      "notes": "<p>• Catatan dan kesimpulan praktikum.</p>"
+    }
+  },
+  {
+    "id": "task_1794488969660",
+    "modul": "test 02",
+    "title": "test 02",
+    "desc": "test 02",
+    "tags": [
+      "Test"
     ],
     "link": "",
     "content": {
