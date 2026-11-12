@@ -147,12 +147,22 @@
       
       <!-- Section 1: Ringkasan Materi & Penjelasan Teks -->
       <section class="content-card rounded-2xl p-6 sm:p-8 bg-surface-card border border-surface-border shadow-lg transition-colors duration-300">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
-            <i data-lucide="align-left" class="w-5 h-5 text-ocean"></i>
-            Ringkasan & Penjelasan Materi
-          </h2>
-          <span class="text-[11px] text-pearl/50 font-mono">(Teks Bebas)</span>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
+              <i data-lucide="align-left" class="w-5 h-5 text-ocean"></i>
+              Ringkasan & Penjelasan Materi
+            </h2>
+            <span class="text-[11px] text-pearl/50 font-mono">(Teks Bebas)</span>
+          </div>
+
+          <!-- Toolbar Edit / Tombol Sisipkan Tabel -->
+          <div id="summaryToolbar" class="hidden flex-wrap items-center gap-2">
+            <button type="button" onclick="openInsertTableModal('bodySummary')" class="px-3 py-1.5 rounded-xl border border-ocean/40 bg-midnight/60 hover:bg-ocean hover:text-noir text-ocean text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm" title="Buat Tabel Baru">
+              <i data-lucide="table" class="w-3.5 h-3.5"></i>
+              <span>Buat Tabel</span>
+            </button>
+          </div>
         </div>
         <div id="bodySummary" contenteditable="false" class="editable-area text-xs sm:text-sm text-pearl/85 leading-relaxed space-y-3 focus:outline-none focus:ring-1 focus:ring-ocean rounded-xl p-3 transition">
           <p>Tuliskan ringkasan materi dan penjelasan hasil pengerjaan tugas di sini. Anda dapat menjelaskan latar belakang teori, langkah-langkah praktikum, atau analisis yang dilakukan.</p>
@@ -195,11 +205,20 @@
 
       <!-- Section 3: Kesimpulan -->
       <section class="content-card rounded-2xl p-6 sm:p-8 bg-surface-card border border-surface-border shadow-lg transition-colors duration-300">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
-            <i data-lucide="check-square" class="w-5 h-5 text-ocean"></i>
-            Kesimpulan
-          </h2>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg sm:text-xl font-bold text-pearl flex items-center gap-2 content-heading">
+              <i data-lucide="check-square" class="w-5 h-5 text-ocean"></i>
+              Kesimpulan
+            </h2>
+          </div>
+          <!-- Toolbar Edit / Tombol Sisipkan Tabel di Catatan -->
+          <div id="notesToolbar" class="hidden flex-wrap items-center gap-2">
+            <button type="button" onclick="openInsertTableModal('bodyNotes')" class="px-3 py-1.5 rounded-xl border border-ocean/40 bg-midnight/60 hover:bg-ocean hover:text-noir text-ocean text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm" title="Buat Tabel di Kesimpulan">
+              <i data-lucide="table" class="w-3.5 h-3.5"></i>
+              <span>Buat Tabel</span>
+            </button>
+          </div>
         </div>
         <div id="bodyNotes" contenteditable="false" class="editable-area text-xs sm:text-sm text-pearl/85 leading-relaxed space-y-2 focus:outline-none focus:ring-1 focus:ring-ocean rounded-xl p-3 transition">
           <p>• Praktikum ini berhasil menguji alur eksekusi sesuai modul mata kuliah Sistem Operasi.</p>
@@ -248,6 +267,65 @@
         <div class="flex items-center justify-end gap-2 pt-2">
           <button type="button" onclick="closeOwnerAuthModal()" class="px-4 py-2 rounded-xl border border-surface-border text-pearl/70 hover:text-pearl text-xs font-semibold transition">Batal</button>
           <button type="submit" class="px-5 py-2 rounded-xl bg-ocean text-noir font-bold text-xs hover:bg-ocean/90 transition shadow">Masuk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Tambah / Buat Tabel -->
+  <div id="insertTableModal" class="fixed inset-0 z-50 hidden bg-noir/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="tableModalBox" class="bg-surface-card border border-surface-border rounded-2xl max-w-md w-full p-6 shadow-2xl relative transition-colors duration-300">
+      <button onclick="closeInsertTableModal()" class="absolute top-4 right-4 p-2 text-pearl/60 hover:text-pearl transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 rounded-xl bg-midnight/70 border border-ocean/30 flex items-center justify-center text-ocean">
+          <i data-lucide="table" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-pearl table-modal-title">Buat Tabel Baru</h3>
+          <p class="text-[11px] text-pearl/60 table-modal-sub">Atur jumlah baris, kolom, dan opsi header tabel</p>
+        </div>
+      </div>
+
+      <form id="insertTableForm" onsubmit="handleInsertTableSubmit(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-ocean">Jumlah Baris</label>
+            <input type="number" id="tableRowsInput" min="1" max="50" value="3" required class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl focus:outline-none focus:border-ocean text-xs transition">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-ocean">Jumlah Kolom</label>
+            <input type="number" id="tableColsInput" min="1" max="15" value="3" required class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl focus:outline-none focus:border-ocean text-xs transition">
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-[11px] font-semibold uppercase tracking-wider text-ocean">Template Kolom (Opsional)</label>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="setTablePreset(3, 4, ['No', 'Nama Perintah / Modul', 'Fungsi / Deskripsi', 'Hasil Uji'])" class="text-[11px] px-2.5 py-1 rounded-lg bg-midnight/50 border border-ocean/30 text-ocean hover:bg-ocean hover:text-noir transition">Praktikum Perintah (4 Kolom)</button>
+            <button type="button" onclick="setTablePreset(3, 3, ['No', 'Komponen / Proses', 'Keterangan'])" class="text-[11px] px-2.5 py-1 rounded-lg bg-midnight/50 border border-ocean/30 text-ocean hover:bg-ocean hover:text-noir transition">Analisis (3 Kolom)</button>
+            <button type="button" onclick="setTablePreset(3, 2, ['Parameter', 'Nilai / Status'])" class="text-[11px] px-2.5 py-1 rounded-lg bg-midnight/50 border border-ocean/30 text-ocean hover:bg-ocean hover:text-noir transition">Konfigurasi (2 Kolom)</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold uppercase tracking-wider mb-1 text-ocean">Nama Header Kolom (Pisahkan dengan koma)</label>
+          <input type="text" id="tableHeadersInput" placeholder="Contoh: No, Perintah, Keterangan" class="w-full px-3.5 py-2.5 rounded-xl bg-noir/40 border border-surface-border text-pearl placeholder-pearl/40 focus:outline-none focus:border-ocean text-xs transition">
+          <p class="text-[10px] text-pearl/50 mt-1">Kosongkan jika ingin judul kolom default (Kolom 1, Kolom 2, dst).</p>
+        </div>
+
+        <div class="p-3 rounded-xl bg-midnight/20 border border-ocean/20 text-[11px] text-pearl/70 leading-relaxed">
+          <span class="text-ocean font-semibold">Tips:</span> Setelah tabel dibuat, Anda dapat langsung mengklik sel tabel manapun untuk mengetik atau menghapus teks layaknya di Word/Excel!
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-surface-border/40">
+          <button type="button" onclick="closeInsertTableModal()" class="px-4 py-2 rounded-xl border border-surface-border text-pearl/70 hover:text-pearl text-xs font-semibold transition">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-ocean text-noir font-bold text-xs hover:bg-ocean/90 transition shadow flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Sisipkan Tabel</span>
+          </button>
         </div>
       </form>
     </div>
@@ -543,6 +621,87 @@
 
     // Mode Edit Switcher
     let isEditing = false;
+    let targetEditableAreaId = 'bodySummary';
+
+    function openInsertTableModal(targetAreaId) {
+      targetEditableAreaId = targetAreaId || 'bodySummary';
+      const modal = document.getElementById('insertTableModal');
+      modal.classList.remove('hidden');
+      document.getElementById('tableRowsInput').value = '3';
+      document.getElementById('tableColsInput').value = '3';
+      document.getElementById('tableHeadersInput').value = '';
+      refreshIcons();
+    }
+
+    function closeInsertTableModal() {
+      const modal = document.getElementById('insertTableModal');
+      modal.classList.add('hidden');
+    }
+
+    document.getElementById('insertTableModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('insertTableModal')) closeInsertTableModal();
+    });
+
+    function setTablePreset(rows, cols, headers) {
+      document.getElementById('tableRowsInput').value = rows;
+      document.getElementById('tableColsInput').value = cols;
+      document.getElementById('tableHeadersInput').value = headers.join(', ');
+    }
+
+    function handleInsertTableSubmit(e) {
+      e.preventDefault();
+      const rows = parseInt(document.getElementById('tableRowsInput').value, 10) || 3;
+      const cols = parseInt(document.getElementById('tableColsInput').value, 10) || 3;
+      const headersRaw = document.getElementById('tableHeadersInput').value.trim();
+      let headerList = [];
+      if (headersRaw) {
+        headerList = headersRaw.split(',').map(h => h.trim());
+      }
+
+      // Bangun elemen tabel HTML
+      const tableWrapper = document.createElement('div');
+      tableWrapper.className = 'task-table-wrapper my-4';
+
+      let tableHtml = '<table class="task-table"><thead><tr>';
+      for (let c = 0; c < cols; c++) {
+        const title = headerList[c] || `Kolom ${c + 1}`;
+        tableHtml += `<th>${escapeHtml(title)}</th>`;
+      }
+      tableHtml += '</tr></thead><tbody>';
+
+      for (let r = 0; r < rows; r++) {
+        tableHtml += '<tr>';
+        for (let c = 0; c < cols; c++) {
+          const sampleText = c === 0 ? `${r + 1}` : `Data ${r + 1}-${c + 1}`;
+          tableHtml += `<td>${sampleText}</td>`;
+        }
+        tableHtml += '</tr>';
+      }
+      tableHtml += '</tbody></table>';
+      tableWrapper.innerHTML = tableHtml;
+
+      const targetArea = document.getElementById(targetEditableAreaId);
+      if (targetArea) {
+        targetArea.appendChild(tableWrapper);
+        // Tambahkan paragraf baru setelah tabel agar pengguna mudah mengetik di bawah tabel
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+        targetArea.appendChild(p);
+      }
+
+      closeInsertTableModal();
+      alert("Tabel berhasil ditambahkan! Anda dapat langsung mengklik sel tabel untuk mengedit isinya.");
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     function toggleEditMode() {
       isEditing = !isEditing;
       const editableAreas = document.querySelectorAll('.editable-area');
@@ -550,6 +709,8 @@
       const bottomSaveBar = document.getElementById('bottomSaveBar');
       const editBtnLabel = document.getElementById('editBtnLabel');
       const uploadControls = document.getElementById('uploadPhotoControls');
+      const summaryToolbar = document.getElementById('summaryToolbar');
+      const notesToolbar = document.getElementById('notesToolbar');
 
       editableAreas.forEach(el => {
         el.setAttribute('contenteditable', isEditing ? 'true' : 'false');
@@ -564,12 +725,16 @@
         editAlert.classList.remove('hidden');
         bottomSaveBar.classList.remove('hidden');
         uploadControls.classList.remove('hidden');
+        if (summaryToolbar) summaryToolbar.classList.remove('hidden');
+        if (notesToolbar) notesToolbar.classList.remove('hidden');
         editBtnLabel.textContent = "Selesai Edit";
         document.querySelectorAll('.photo-delete-btn').forEach(btn => btn.classList.remove('hidden'));
       } else {
         editAlert.classList.add('hidden');
         bottomSaveBar.classList.add('hidden');
         uploadControls.classList.add('hidden');
+        if (summaryToolbar) summaryToolbar.classList.add('hidden');
+        if (notesToolbar) notesToolbar.classList.add('hidden');
         editBtnLabel.textContent = "Edit Isi Tugas";
         document.querySelectorAll('.photo-delete-btn').forEach(btn => btn.classList.add('hidden'));
       }
@@ -664,6 +829,14 @@
         document.querySelectorAll('.tag-badge').forEach(el => {
           el.className = "tag-badge text-[11px] px-2.5 py-1 rounded-md bg-midnight/40 text-ocean border border-ocean/20 font-mono";
         });
+        const tableModalBox = document.getElementById('tableModalBox');
+        if (tableModalBox) {
+          tableModalBox.className = "bg-surface-card border border-surface-border rounded-2xl max-w-md w-full p-6 shadow-2xl relative transition-colors duration-300 text-pearl";
+          const title = tableModalBox.querySelector('.table-modal-title');
+          if (title) title.className = "text-base font-bold text-pearl table-modal-title";
+          const sub = tableModalBox.querySelector('.table-modal-sub');
+          if (sub) sub.className = "text-[11px] text-pearl/60 table-modal-sub";
+        }
 
       } else {
         document.documentElement.classList.remove('dark');
@@ -692,6 +865,14 @@
         document.querySelectorAll('.tag-badge').forEach(el => {
           el.className = "tag-badge text-[11px] px-2.5 py-1 rounded-md bg-midnight/5 text-midnight border border-surface-lightBorder font-mono";
         });
+        const tableModalBox = document.getElementById('tableModalBox');
+        if (tableModalBox) {
+          tableModalBox.className = "bg-white border border-surface-lightBorder rounded-2xl max-w-md w-full p-6 shadow-xl relative transition-colors duration-300 text-midnight";
+          const title = tableModalBox.querySelector('.table-modal-title');
+          if (title) title.className = "text-base font-bold text-midnight table-modal-title";
+          const sub = tableModalBox.querySelector('.table-modal-sub');
+          if (sub) sub.className = "text-[11px] text-midnight/70 table-modal-sub";
+        }
       }
 
       refreshIcons();
